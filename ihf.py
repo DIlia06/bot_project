@@ -10,7 +10,7 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemo
 
 logging.basicConfig(level=logging.INFO)
 
-BOT_TOKEN = "8337047101:AAEMepjuRafztG8HOhDPFlH6EJL14wY-"
+BOT_TOKEN = "8337047101:AAEMepjuRafztG8HOhDPFlH6EJL14wY-8J8"
 BASE_API_URL = "http://127.0.0.1:8000/api"
 
 ABOUT_US_URL = f"{BASE_API_URL}/core/about_us"
@@ -18,7 +18,6 @@ CREATE_APPEAL_URL = f"{BASE_API_URL}/appeals/create_appeal"
 LIST_APPEALS_URL = f"{BASE_API_URL}/appeals/list"
 GET_OR_CREATE_USER_URL = f"{BASE_API_URL}/users/get_or_create"
 
-# URL для разделов каталога
 CATALOG_PRINTERS_URL = f"{BASE_API_URL}/catalog/printers"
 CATALOG_MFU_URL = f"{BASE_API_URL}/catalog/mfu"
 CATALOG_OPTIONAL_URL = f"{BASE_API_URL}/catalog/optional"
@@ -102,7 +101,7 @@ def get_main_keyboard():
     buttons = [
         [KeyboardButton(text="📖 О нас")],
         [KeyboardButton(text="✉️ Обращения")],
-        [KeyboardButton(text="🛍 Каталог")]
+        [KeyboardButton(text="🛍 Каталог")],
     ]
     return ReplyKeyboardMarkup(keyboard=buttons, resize_keyboard=True)
 
@@ -130,6 +129,16 @@ def get_catalog_categories_keyboard():
 @dp.message(Command("start"))
 async def cmd_start(message: types.Message):
     await message.answer("Добро пожаловать! Выберите раздел:", reply_markup=get_main_keyboard())
+
+@dp.message(Command("location"))
+@dp.message(F.text.in_(["📍 Наш адрес", "Наш адрес"]))
+async def location_handler(message: types.Message):
+    address = "г. Минск, ул. Олешева 3, офис 323"
+    maps_link = "https://yandex.ru/maps/?text=Минск%2C+ул.+Олешева+3"
+    await message.answer(
+        f"🏢 Наш адрес:\n{address}\n\n"
+        f"🗺 Открыть на карте: {maps_link}"
+    )
 
 @dp.message(F.text.in_(["📖 О нас", "О нас"]))
 async def about_us_handler(message: types.Message):
